@@ -9,6 +9,7 @@ import { dayLabel } from "@/lib/plan/dayLabel";
 import { localizedField } from "@/lib/plan/localized";
 import type { Tables } from "@/lib/supabase/database.types";
 import { Card } from "@/components/ui/Card";
+import { PaywallLockClient } from "@/components/PaywallLockClient";
 import type { GeneratedMealPlan } from "@/lib/actions/preview";
 
 type Recipe = Tables<"recipes">;
@@ -18,11 +19,15 @@ export function MealPreview({
   profile,
   recipes,
   mealPlan,
+  unlockedDay,
   onChange,
 }: {
   profile: MealPlanProfileInput;
   recipes: Recipe[];
   mealPlan: GeneratedMealPlan;
+  /** The one day shown in full — everything else renders blurred behind a
+   * paywall CTA instead of a fake placeholder, since it's real plan data. */
+  unlockedDay: (typeof DAYS_OF_WEEK)[number];
   onChange: (next: GeneratedMealPlan) => void;
 }) {
   const { t, locale } = useLocale();
@@ -69,8 +74,9 @@ export function MealPreview({
       <div className="flex flex-col gap-3">
         {DAYS_OF_WEEK.map((day) => {
           const dayPlan = mealPlan.planData.days[day];
-          return (
-            <Card key={day} className="flex flex-col gap-2">
+          const locked = day !== unlockedDay;
+          const card = (
+            <Card className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-extrabold uppercase tracking-wide text-[var(--color-text-tertiary)]">
                   {dayLabel(day, t)}
@@ -98,14 +104,16 @@ export function MealPreview({
                           {localizedField(recipe, "name", "name_ka", locale)}
                         </span>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setOpenSwap(isOpen ? null : key)}
-                        className="soft-raised flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold text-[var(--color-text-secondary)]"
-                      >
-                        <Repeat strokeWidth={1.8} className="h-3 w-3" />
-                        {t.meals.swap}
-                      </button>
+                      {!locked && (
+                        <button
+                          type="button"
+                          onClick={() => setOpenSwap(isOpen ? null : key)}
+                          className="soft-raised flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold text-[var(--color-text-secondary)]"
+                        >
+                          <Repeat strokeWidth={1.8} className="h-3 w-3" />
+                          {t.meals.swap}
+                        </button>
+                      )}
                     </div>
                     {isOpen && (
                       <div className="mt-2 flex flex-col gap-1.5 border-t border-black/[0.04] pt-2">
@@ -146,6 +154,11 @@ export function MealPreview({
                 </p>
               )}
             </Card>
+          );
+          return (
+            <div key={day}>
+              {locked ? <PaywallLockClient>{card}</PaywallLockClient> : card}
+            </div>
           );
         })}
       </div>

@@ -3,26 +3,29 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sparkles, ArrowLeft } from "lucide-react";
-import { useLocale } from "@/lib/i18n";
+import { Sparkles, ArrowLeft, Lock } from "lucide-react";
+import { useLocale, format } from "@/lib/i18n";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input, Label, Select, Textarea } from "@/components/ui/Input";
 import { Chip, ChipGroup } from "@/components/ui/Chip";
+import { PaywallLockClient } from "@/components/PaywallLockClient";
 import type { OnboardingInput } from "@/app/onboarding/actions";
+import { submitOnboarding } from "@/app/onboarding/actions";
 import {
   generateMealPlanData,
+  DAYS_OF_WEEK,
   type MealPlanProfileInput,
 } from "@/lib/plan/mealPlan";
 import { generateWorkoutPlanData, type WorkoutPlanProfileInput } from "@/lib/plan/workoutPlan";
 import { fetchAllRecipes, fetchAllExercises, createPreviewId } from "@/lib/plan/previewPlan";
-import { currentWeekStart } from "@/lib/plan/weekDate";
-import { saveGeneratedPlan, type GeneratedMealPlan, type GeneratedWorkoutPlan } from "@/lib/actions/preview";
+import { currentWeekStart, dayKeyForDate } from "@/lib/plan/weekDate";
+import { dayLabel } from "@/lib/plan/dayLabel";
+import type { GeneratedMealPlan, GeneratedWorkoutPlan } from "@/lib/actions/preview";
 import { savePendingPlan } from "@/lib/plan/pendingPlan";
 import { createClient } from "@/lib/supabase/client";
 import type { Tables } from "@/lib/supabase/database.types";
 import { MealPreview } from "./MealPreview";
-import { WorkoutPreview } from "./WorkoutPreview";
 
 const ALLERGY_OPTIONS = ["nuts", "peanuts", "dairy", "egg", "gluten", "soy", "fish", "shellfish"] as const;
 const RESTRICTION_OPTIONS = ["vegetarian", "vegan", "gluten_free", "dairy_free", "pescatarian"] as const;
@@ -177,7 +180,7 @@ export function GetStartedFlow() {
     };
 
     setSubmitting(true);
-    savePendingPlan({ input, mealPlan, workoutPlan });
+    savePendingPlan({ input });
 
     const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({
@@ -193,7 +196,10 @@ export function GetStartedFlow() {
     }
 
     if (data.session) {
-      const result = await saveGeneratedPlan(input, mealPlan, workoutPlan);
+      // Only the intake answers are saved — no free persistent plan. /home
+      // will compute a fresh (unsaved) teaser plan from this profile via the
+      // ephemeral path (see getOrCreateWeekPlans) until they subscribe.
+      const result = await submitOnboarding(input);
       setSubmitting(false);
       if (result.error) {
         setSignupError(result.error);
@@ -414,7 +420,13 @@ export function GetStartedFlow() {
             <h1 className="text-2xl font-extrabold tracking-tight">{t.meals.title}</h1>
             <p className="text-sm text-[var(--color-text-secondary)]">{t.onboarding.mealPreviewSubtitle}</p>
           </div>
-          <MealPreview profile={mealProfileInput} recipes={recipes} mealPlan={mealPlan} onChange={setMealPlan} />
+          <MealPreview
+            profile={mealProfileInput}
+            recipes={recipes}
+            mealPlan={mealPlan}
+            unlockedDay={dayKeyForDate()}
+            onChange={setMealPlan}
+          />
           <Card className="flex flex-col items-center gap-3 text-center">
             <Sparkles strokeWidth={1.8} className="h-6 w-6 text-[var(--color-accent)]" />
             <p className="text-sm text-[var(--color-text-secondary)]">{t.onboarding.continueToWorkoutBody}</p>
@@ -476,13 +488,26 @@ export function GetStartedFlow() {
         <div className="flex flex-col gap-6">
           <div>
             <h1 className="text-2xl font-extrabold tracking-tight">{t.onboarding.workoutPreviewTitle}</h1>
+            <p className="text-sm text-[var(--color-text-secondary)]">{t.onboarding.workoutLockedBody}</p>
           </div>
-          <WorkoutPreview
-            previewId={previewId}
-            exercises={exercises}
-            workoutPlan={workoutPlan}
-            onChange={setWorkoutPlan}
-          />
+          <PaywallLockClient className="flex flex-col gap-3">
+            {DAYS_OF_WEEK.map((day) => {
+              const dayPlan = workoutPlan.planData.days[day];
+              return (
+                <Card key={day} className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-extrabold uppercase tracking-wide text-[var(--color-text-tertiary)]">
+                    {dayLabel(day, t)}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-[var(--color-accent-2)]">
+                    <Lock strokeWidth={1.8} className="h-3.5 w-3.5" />
+                    {dayPlan.type === "workout"
+                      ? format(t.onboarding.workoutExerciseCount, { count: dayPlan.exercises.length })
+                      : t.workouts.restDay}
+                  </span>
+                </Card>
+              );
+            })}
+          </PaywallLockClient>
           <Card className="flex flex-col items-center gap-3 text-center">
             <Sparkles strokeWidth={1.8} className="h-7 w-7 text-[var(--color-accent)]" />
             <h2 className="text-lg font-extrabold tracking-tight">{t.onboarding.saveCta}</h2>

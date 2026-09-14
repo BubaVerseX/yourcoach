@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getServerDictionary } from "@/lib/i18n/serverLocale";
+import { isSubscriptionActive } from "@/lib/premium/access";
 import { getTemplateImages } from "@/lib/images/ensureTemplateImages";
 import { TemplateGallery } from "@/components/TemplateGallery";
 
@@ -14,9 +16,14 @@ export default async function WorkoutTemplatesPage() {
   if (!user) return null;
 
   const [{ data: profile }, templateImages] = await Promise.all([
-    supabase.from("profiles").select("equipment_setting").eq("id", user.id).single(),
+    supabase.from("profiles").select("equipment_setting, subscription_status, subscription_expires_at").eq("id", user.id).single(),
     getTemplateImages(),
   ]);
+
+  // Applying a template is a persistent mutation, gated by requireActivePremium
+  // server-side — redirect before rendering rather than showing a page whose
+  // only action always fails.
+  if (!isSubscriptionActive(profile)) redirect("/workouts");
 
   return (
     <div className="flex flex-col gap-6 py-6">

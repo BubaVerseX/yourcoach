@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, Dumbbell } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getServerDictionary } from "@/lib/i18n/serverLocale";
@@ -37,8 +37,12 @@ export default async function WorkoutDayPage({
   if (!user) return null;
 
   const weekStart = currentWeekStart();
-  const { workoutPlan } = await getOrCreateWeekPlans(user.id, weekStart);
+  const { workoutPlan, isEphemeral } = await getOrCreateWeekPlans(user.id, weekStart);
   if (!workoutPlan) notFound();
+
+  // The full workout plan is entirely locked pre-subscription — no sample
+  // day, unlike meals. /workouts already shows the locked week list.
+  if (isEphemeral) redirect("/workouts");
 
   const dayPlan = workoutPlan.planData.days[dayKey];
   const date = dateForDay(weekStart, dayKey);

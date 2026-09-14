@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { BlobImage } from "@/components/ui/BlobImage";
 import { DuotonePhoto } from "@/components/ui/DuotonePhoto";
 import { ImageAttribution } from "@/components/ui/ImageAttribution";
-import { FreePreviewBanner } from "@/components/FreePreviewBanner";
+import { PaywallLock } from "@/components/PaywallLock";
 import { QuickMealLogToggle } from "@/components/QuickMealLogToggle";
 import { WorkoutCompleteButton } from "@/components/WorkoutCompleteButton";
 import { RotatingBanner } from "@/components/RotatingBanner";
@@ -125,8 +125,6 @@ export default async function HomePage() {
         {format(t.home.greeting, { name: profile?.full_name?.split(" ")[0] ?? "" })}
       </p>
 
-      {isEphemeral && <FreePreviewBanner />}
-
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard
           value={mealPlan?.calorieTarget ?? "—"}
@@ -143,48 +141,63 @@ export default async function HomePage() {
       </div>
 
       {todayWorkout?.type === "workout" && (
-        <div className="flex flex-col gap-3">
-          <div className="relative h-[250px] w-full overflow-hidden">
-            <DuotonePhoto
-              src={featuredExercise?.image_url}
-              alt=""
-              className="h-full w-full"
-              sizes="(min-width: 768px) 700px, 100vw"
-            />
-            <span className="text-mono-label absolute top-4 left-4 z-10 bg-[var(--color-accent)] px-2.5 py-1 text-[9px] text-[var(--color-bg)]">
-              TODAY&apos;S SESSION
-            </span>
-            <div className="absolute right-0 bottom-0 left-0 z-10 p-4">
-              <h2 className="text-display text-[36px] text-[var(--color-text-primary)] md:text-[44px]">
-                {(en.workouts.muscleGroups[todayWorkout.focus as keyof typeof en.workouts.muscleGroups] ??
-                  todayWorkout.focus
-                ).toUpperCase()}
-              </h2>
-              <p className="text-sm font-bold text-[var(--color-text-primary)]">
-                {t.workouts.muscleGroups[todayWorkout.focus as keyof typeof t.workouts.muscleGroups] ??
-                  todayWorkout.focus}
-                {" · "}
-                {format(t.home.approxDuration, { minutes: profile?.time_available_minutes ?? 30 })}
-              </p>
+        <MaybeLocked locked={!!isEphemeral}>
+          <div className="flex flex-col gap-3">
+            <div className="relative h-[250px] w-full overflow-hidden">
+              <DuotonePhoto
+                src={featuredExercise?.image_url}
+                alt=""
+                className="h-full w-full"
+                sizes="(min-width: 768px) 700px, 100vw"
+              />
+              <span className="text-mono-label absolute top-4 left-4 z-10 bg-[var(--color-accent)] px-2.5 py-1 text-[9px] text-[var(--color-bg)]">
+                TODAY&apos;S SESSION
+              </span>
+              <div className="absolute right-0 bottom-0 left-0 z-10 p-4">
+                <h2 className="text-display text-[36px] text-[var(--color-text-primary)] md:text-[44px]">
+                  {(en.workouts.muscleGroups[todayWorkout.focus as keyof typeof en.workouts.muscleGroups] ??
+                    todayWorkout.focus
+                  ).toUpperCase()}
+                </h2>
+                <p className="text-sm font-bold text-[var(--color-text-primary)]">
+                  {t.workouts.muscleGroups[todayWorkout.focus as keyof typeof t.workouts.muscleGroups] ??
+                    todayWorkout.focus}
+                  {" · "}
+                  {format(t.home.approxDuration, { minutes: profile?.time_available_minutes ?? 30 })}
+                </p>
+              </div>
+              <div
+                className="absolute right-0 bottom-0 left-0 z-10 h-[56px] bg-[var(--color-bg)]"
+                style={{ clipPath: "polygon(0 100%, 100% 45%, 100% 100%)" }}
+              />
             </div>
-            <div
-              className="absolute right-0 bottom-0 left-0 z-10 h-[56px] bg-[var(--color-bg)]"
-              style={{ clipPath: "polygon(0 100%, 100% 45%, 100% 100%)" }}
-            />
+            <div className="flex gap-3">
+              {isEphemeral ? (
+                <>
+                  <Button variant="primary" className="w-full flex-1">
+                    {t.home.startSession}
+                  </Button>
+                  <Button variant="ghost" className="w-full flex-1">
+                    {t.home.skipSession}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link href={`/workouts/${todayKey}`} className="flex-1">
+                    <Button variant="primary" className="w-full">
+                      {t.home.startSession}
+                    </Button>
+                  </Link>
+                  <Link href={`/workouts/${todayKey}`} className="flex-1">
+                    <Button variant="ghost" className="w-full">
+                      {t.home.skipSession}
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-          <div className="flex gap-3">
-            <Link href={`/workouts/${todayKey}`} className="flex-1">
-              <Button variant="primary" className="w-full">
-                {t.home.startSession}
-              </Button>
-            </Link>
-            <Link href={`/workouts/${todayKey}`} className="flex-1">
-              <Button variant="ghost" className="w-full">
-                {t.home.skipSession}
-              </Button>
-            </Link>
-          </div>
-        </div>
+        </MaybeLocked>
       )}
 
       <RotatingBanner slides={bannerSlides} />
@@ -249,72 +262,78 @@ export default async function HomePage() {
                 if (!recipe) return null;
                 const displayCalories = Math.round(recipe.calories * portionFor(todayMeals, slot));
                 return (
-                  <div key={slot} className="soft-pressed flex items-center justify-between gap-2 rounded-xl px-4 py-3">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <BlobImage
-                        src={recipe.image_url}
-                        alt={recipe.name}
-                        icon={Utensils}
-                        variant={1}
-                        className="h-10 w-10 shrink-0"
-                        sizes="40px"
-                      />
-                      <div className="min-w-0">
-                        <span className="block text-[10px] font-bold uppercase text-[var(--color-text-tertiary)]">
-                          {t.meals[slot]}
-                        </span>
-                        <span className="block truncate text-sm font-semibold">
-                          {localizedField(recipe, "name", "name_ka", locale)}
-                        </span>
-                        <ImageAttribution
-                          name={recipe.image_attribution_name}
-                          url={recipe.image_attribution_url}
+                  <MaybeLocked key={slot} locked={!!isEphemeral && slot !== "breakfast"}>
+                    <div className="soft-pressed flex items-center justify-between gap-2 rounded-xl px-4 py-3">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <BlobImage
+                          src={recipe.image_url}
+                          alt={recipe.name}
+                          icon={Utensils}
+                          variant={1}
+                          className="h-10 w-10 shrink-0"
+                          sizes="40px"
                         />
+                        <div className="min-w-0">
+                          <span className="block text-[10px] font-bold uppercase text-[var(--color-text-tertiary)]">
+                            {t.meals[slot]}
+                          </span>
+                          <span className="block truncate text-sm font-semibold">
+                            {localizedField(recipe, "name", "name_ka", locale)}
+                          </span>
+                          <ImageAttribution
+                            name={recipe.image_attribution_name}
+                            url={recipe.image_attribution_url}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-2">
+                        <span className="flex items-center gap-1 text-xs text-[var(--color-text-tertiary)]">
+                          <Flame strokeWidth={1.8} className="h-3.5 w-3.5" />
+                          {displayCalories}
+                        </span>
+                        {(!isEphemeral || slot === "breakfast") && (
+                          <QuickMealLogToggle
+                            date={todayDate}
+                            slot={slot}
+                            initialStatus={mealLogBySlot.get(slot) ?? null}
+                          />
+                        )}
                       </div>
                     </div>
-                    <div className="flex shrink-0 items-center gap-2">
-                      <span className="flex items-center gap-1 text-xs text-[var(--color-text-tertiary)]">
-                        <Flame strokeWidth={1.8} className="h-3.5 w-3.5" />
-                        {displayCalories}
-                      </span>
-                      <QuickMealLogToggle
-                        date={todayDate}
-                        slot={slot}
-                        initialStatus={mealLogBySlot.get(slot) ?? null}
-                      />
-                    </div>
-                  </div>
+                  </MaybeLocked>
                 );
               })}
               {todayMeals.snacks.map((id) => {
                 const recipe = recipeMap.get(id);
                 if (!recipe) return null;
                 return (
-                  <div key={id} className="soft-pressed flex items-center justify-between rounded-xl px-4 py-3">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <BlobImage
-                        src={recipe.image_url}
-                        alt={recipe.name}
-                        icon={Utensils}
-                        variant={2}
-                        className="h-10 w-10 shrink-0"
-                        sizes="40px"
-                      />
-                      <div className="min-w-0">
-                        <span className="block truncate text-sm font-semibold">
-                          {localizedField(recipe, "name", "name_ka", locale)}
-                        </span>
-                        <ImageAttribution
-                          name={recipe.image_attribution_name}
-                          url={recipe.image_attribution_url}
+                  <MaybeLocked key={id} locked={!!isEphemeral}>
+                    <div className="soft-pressed flex items-center justify-between rounded-xl px-4 py-3">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <BlobImage
+                          src={recipe.image_url}
+                          alt={recipe.name}
+                          icon={Utensils}
+                          variant={2}
+                          className="h-10 w-10 shrink-0"
+                          sizes="40px"
                         />
+                        <div className="min-w-0">
+                          <span className="block truncate text-sm font-semibold">
+                            {localizedField(recipe, "name", "name_ka", locale)}
+                          </span>
+                          <ImageAttribution
+                            name={recipe.image_attribution_name}
+                            url={recipe.image_attribution_url}
+                          />
+                        </div>
                       </div>
+                      <span className="flex shrink-0 items-center gap-1 text-xs text-[var(--color-text-tertiary)]">
+                        <Flame strokeWidth={1.8} className="h-3.5 w-3.5" />
+                        {recipe.calories} {t.meals.calories}
+                      </span>
                     </div>
-                    <span className="flex shrink-0 items-center gap-1 text-xs text-[var(--color-text-tertiary)]">
-                      <Flame strokeWidth={1.8} className="h-3.5 w-3.5" />
-                      {recipe.calories} {t.meals.calories}
-                    </span>
-                  </div>
+                  </MaybeLocked>
                 );
               })}
             </>
@@ -335,53 +354,57 @@ export default async function HomePage() {
           </Link>
         </div>
         {todayWorkout?.type === "workout" ? (
-          <div className="flex flex-col gap-3">
-            <div className="text-mono-label flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-[var(--color-text-tertiary)]">
-              <span>{format(t.home.featuredExercises, { count: todayWorkout.exercises.length })}</span>
-              <span>{format(t.home.approxDuration, { minutes: profile?.time_available_minutes ?? 30 })}</span>
-              <span>
-                {format(t.common.khinkaliBurned, {
-                  count: caloriesToKhinkali(estimateWorkoutCalories(profile?.time_available_minutes ?? 30)),
-                })}
-              </span>
-            </div>
-            {todayWorkout.exercises.map((ex) => {
-              const exercise = exerciseMap.get(ex.exerciseId);
-              if (!exercise) return null;
-              return (
-                <div key={ex.exerciseId} className="soft-pressed flex items-center justify-between rounded-xl px-4 py-3">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <BlobImage
-                      src={exercise.image_url}
-                      alt={exercise.name}
-                      icon={Dumbbell}
-                      variant={3}
-                      className="h-10 w-10 shrink-0"
-                      sizes="40px"
-                    />
-                    <div className="min-w-0">
-                      <span className="block truncate text-sm font-semibold">
-                        {localizedField(exercise, "name", "name_ka", locale)}
-                      </span>
-                      <ImageAttribution
-                        name={exercise.image_attribution_name}
-                        url={exercise.image_attribution_url}
+          <MaybeLocked locked={!!isEphemeral}>
+            <div className="flex flex-col gap-3">
+              <div className="text-mono-label flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-[var(--color-text-tertiary)]">
+                <span>{format(t.home.featuredExercises, { count: todayWorkout.exercises.length })}</span>
+                <span>{format(t.home.approxDuration, { minutes: profile?.time_available_minutes ?? 30 })}</span>
+                <span>
+                  {format(t.common.khinkaliBurned, {
+                    count: caloriesToKhinkali(estimateWorkoutCalories(profile?.time_available_minutes ?? 30)),
+                  })}
+                </span>
+              </div>
+              {todayWorkout.exercises.map((ex) => {
+                const exercise = exerciseMap.get(ex.exerciseId);
+                if (!exercise) return null;
+                return (
+                  <div key={ex.exerciseId} className="soft-pressed flex items-center justify-between rounded-xl px-4 py-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <BlobImage
+                        src={exercise.image_url}
+                        alt={exercise.name}
+                        icon={Dumbbell}
+                        variant={3}
+                        className="h-10 w-10 shrink-0"
+                        sizes="40px"
                       />
+                      <div className="min-w-0">
+                        <span className="block truncate text-sm font-semibold">
+                          {localizedField(exercise, "name", "name_ka", locale)}
+                        </span>
+                        <ImageAttribution
+                          name={exercise.image_attribution_name}
+                          url={exercise.image_attribution_url}
+                        />
+                      </div>
                     </div>
+                    <span className="shrink-0 text-xs text-[var(--color-text-tertiary)]">
+                      {ex.sets} {t.workouts.sets} × {ex.reps}
+                    </span>
                   </div>
-                  <span className="shrink-0 text-xs text-[var(--color-text-tertiary)]">
-                    {ex.sets} {t.workouts.sets} × {ex.reps}
-                  </span>
+                );
+              })}
+              {!isEphemeral && (
+                <div className="mt-1">
+                  <WorkoutCompleteButton
+                    date={todayDate}
+                    initialCompleted={!!todayProgressLog?.workout_completed}
+                  />
                 </div>
-              );
-            })}
-            <div className="mt-1">
-              <WorkoutCompleteButton
-                date={todayDate}
-                initialCompleted={!!todayProgressLog?.workout_completed}
-              />
+              )}
             </div>
-          </div>
+          </MaybeLocked>
         ) : (
           <p className="text-sm text-[var(--color-text-secondary)]">{t.workouts.restDayBody}</p>
         )}
@@ -402,4 +425,9 @@ function goalLabelKey(goal: string): "goalLose" | "goalGain" | "goalMaintain" | 
   if (goal === "gain_weight") return "goalGain";
   if (goal === "build_muscle") return "goalMuscle";
   return "goalMaintain";
+}
+
+async function MaybeLocked({ locked, children }: { locked: boolean; children: React.ReactNode }) {
+  if (!locked) return <>{children}</>;
+  return <PaywallLock>{children}</PaywallLock>;
 }

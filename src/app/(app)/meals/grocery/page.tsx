@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getServerDictionary } from "@/lib/i18n/serverLocale";
@@ -20,7 +21,11 @@ export default async function GroceryListPage() {
   if (!user) return null;
 
   const weekStart = currentWeekStart();
-  const { mealPlan } = await getOrCreateWeekPlans(user.id, weekStart);
+  const { mealPlan, isEphemeral } = await getOrCreateWeekPlans(user.id, weekStart);
+
+  // Grocery checklist state is tracking, not a preview — entirely locked
+  // pre-subscription. /meals already shows this link locked.
+  if (isEphemeral) redirect("/meals");
 
   return (
     <div className="flex flex-col gap-6 py-6">

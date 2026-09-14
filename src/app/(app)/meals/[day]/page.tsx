@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getServerDictionary } from "@/lib/i18n/serverLocale";
 import { format } from "@/lib/i18n/format";
 import { currentWeekStart } from "@/lib/plan/generatePlan";
-import { dateForDay } from "@/lib/plan/weekDate";
+import { dateForDay, dayKeyForDate } from "@/lib/plan/weekDate";
 import { getOrCreateWeekPlans } from "@/lib/plan/getWeekPlans";
 import { DAYS_OF_WEEK, portionFor, type DayKey } from "@/lib/plan/mealPlan";
 import { getRecipesByIds, mealIdsFromDay } from "@/lib/plan/lookups";
@@ -20,6 +20,7 @@ import { GeorgianRibbonBadge } from "@/components/ui/GeorgianRibbonBadge";
 import { MealSwapPanel } from "@/components/MealSwapPanel";
 import { MealMainSlotControls } from "@/components/MealMainSlotControls";
 import { MealTimeTabs } from "@/components/MealTimeTabs";
+import { PaywallLockCard } from "@/components/PaywallLock";
 import type { MealSlot } from "@/lib/actions/swap";
 
 const MEAL_TYPE_ORDER = ["breakfast", "lunch", "dinner"] as const;
@@ -42,8 +43,13 @@ export default async function MealDayPage({
   if (!user) return null;
 
   const weekStart = currentWeekStart();
-  const { mealPlan } = await getOrCreateWeekPlans(user.id, weekStart);
+  const { mealPlan, isEphemeral } = await getOrCreateWeekPlans(user.id, weekStart);
   if (!mealPlan) notFound();
+
+  // Without a subscription, only today's day view is reachable at all — the
+  // week list (/meals) never links to other days when ephemeral, but guard
+  // direct navigation too.
+  if (isEphemeral && dayKey !== dayKeyForDate()) notFound();
 
   const dayPlan = mealPlan.planData.days[dayKey];
   const ids = mealIdsFromDay(dayPlan);
@@ -215,7 +221,16 @@ export default async function MealDayPage({
   ];
   const tabs = tabTypes
     .filter((tab) => grouped[tab.key].length > 0)
-    .map((tab) => ({ key: tab.key, label: tab.label, content: renderGroup(grouped[tab.key]) }));
+    .map((tab) => ({
+      key: tab.key,
+      label: tab.label,
+      content:
+        isEphemeral && tab.key !== "breakfast" ? (
+          <PaywallLockCard title={t.premium.lockedBadge} body={t.premium.freePreviewBody} />
+        ) : (
+          renderGroup(grouped[tab.key])
+        ),
+    }));
 
   return (
     <div className="flex flex-col gap-6 py-6">

@@ -11,7 +11,7 @@ import { localizedField } from "@/lib/plan/localized";
 import { dayLabel } from "@/lib/plan/dayLabel";
 import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { FreePreviewBanner } from "@/components/FreePreviewBanner";
+import { PaywallLock } from "@/components/PaywallLock";
 
 export default async function MealsPage() {
   const supabase = await createClient();
@@ -45,8 +45,6 @@ export default async function MealsPage() {
         </p>
       </div>
 
-      {isEphemeral && <FreePreviewBanner />}
-
       <Card className="flex items-center justify-around text-center">
         <div>
           <div className="text-xl font-extrabold text-[var(--color-accent)]">
@@ -68,14 +66,25 @@ export default async function MealsPage() {
         </div>
       </Card>
 
-      <Link href="/meals/grocery">
-        <Card className="flex items-center justify-between transition-all hover:translate-y-[-1px]">
-          <span className="flex items-center gap-2 text-sm font-bold">
-            <ShoppingCart strokeWidth={1.8} className="h-4 w-4 text-[var(--color-accent)]" />
-            {t.meals.groceryList}
-          </span>
-        </Card>
-      </Link>
+      {isEphemeral ? (
+        <PaywallLock>
+          <Card className="flex items-center justify-between">
+            <span className="flex items-center gap-2 text-sm font-bold">
+              <ShoppingCart strokeWidth={1.8} className="h-4 w-4 text-[var(--color-accent)]" />
+              {t.meals.groceryList}
+            </span>
+          </Card>
+        </PaywallLock>
+      ) : (
+        <Link href="/meals/grocery">
+          <Card className="flex items-center justify-between transition-all hover:translate-y-[-1px]">
+            <span className="flex items-center gap-2 text-sm font-bold">
+              <ShoppingCart strokeWidth={1.8} className="h-4 w-4 text-[var(--color-accent)]" />
+              {t.meals.groceryList}
+            </span>
+          </Card>
+        </Link>
+      )}
 
       <div className="flex flex-col gap-3">
         {DAYS_OF_WEEK.map((day) => {
@@ -86,29 +95,36 @@ export default async function MealsPage() {
             .filter(Boolean)
             .map((r) => localizedField(r!, "name", "name_ka", locale));
 
+          const card = (
+            <Card className="flex items-center justify-between transition-all hover:translate-y-[-1px]">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-extrabold uppercase tracking-wide text-[var(--color-text-tertiary)]">
+                    {dayLabel(day, t)}
+                  </span>
+                  {day === todayKey && (
+                    <span className="soft-raised rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase text-[var(--color-accent)]">
+                      {t.common.today}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                  {names.join(" · ")}
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-sm font-bold text-[var(--color-accent)]">
+                <Flame strokeWidth={1.8} className="h-4 w-4" />
+                {dayPlan.totalCalories}
+              </div>
+            </Card>
+          );
+
+          if (isEphemeral && day !== todayKey) {
+            return <PaywallLock key={day}>{card}</PaywallLock>;
+          }
           return (
             <Link key={day} href={`/meals/${day}`} className="relative block">
-              <Card className="flex items-center justify-between transition-all hover:translate-y-[-1px]">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-extrabold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-                      {dayLabel(day, t)}
-                    </span>
-                    {day === todayKey && (
-                      <span className="soft-raised rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase text-[var(--color-accent)]">
-                        {t.common.today}
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
-                    {names.join(" · ")}
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-sm font-bold text-[var(--color-accent)]">
-                  <Flame strokeWidth={1.8} className="h-4 w-4" />
-                  {dayPlan.totalCalories}
-                </div>
-              </Card>
+              {card}
             </Link>
           );
         })}

@@ -8,7 +8,6 @@ import { Card } from "@/components/ui/Card";
 import { Input, Label, Select, Textarea } from "@/components/ui/Input";
 import { Chip, ChipGroup } from "@/components/ui/Chip";
 import { submitOnboarding, type OnboardingInput } from "./actions";
-import { saveGeneratedPlan } from "@/lib/actions/preview";
 import { loadPendingPlan, clearPendingPlan } from "@/lib/plan/pendingPlan";
 
 const ALLERGY_OPTIONS = ["nuts", "peanuts", "dairy", "egg", "gluten", "soy", "fish", "shellfish"] as const;
@@ -54,17 +53,18 @@ export default function OnboardingPage() {
   const [form, setForm] = useState<FormState>(initialState);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // If the user generated a plan anonymously via /get-started and had to
-  // confirm their email before a session existed, the plan is waiting in
-  // sessionStorage — save it now instead of making them redo the form. Read
-  // synchronously on first render so there's no flash of the manual form.
+  // If the user completed the intake quiz anonymously via /get-started and
+  // had to confirm their email before a session existed, their answers are
+  // waiting in sessionStorage — submit them now instead of making them redo
+  // the form. Read synchronously on first render so there's no flash of the
+  // manual form.
   const [pendingPlan] = useState(() => loadPendingPlan());
   const [resuming, setResuming] = useState(!!pendingPlan);
 
   useEffect(() => {
     if (!pendingPlan) return;
 
-    saveGeneratedPlan(pendingPlan.input, pendingPlan.mealPlan, pendingPlan.workoutPlan).then((result) => {
+    submitOnboarding(pendingPlan.input).then((result) => {
       clearPendingPlan();
       if (result.error) {
         setResuming(false);
