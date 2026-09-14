@@ -325,6 +325,8 @@ export type Database = {
           activity_level: string | null
           age: number | null
           allergies: string[]
+          avatar_current: Json | null
+          avatar_goal: Json | null
           created_at: string
           dietary_restrictions: string[]
           disclaimer_accepted_at: string | null
@@ -350,6 +352,8 @@ export type Database = {
           activity_level?: string | null
           age?: number | null
           allergies?: string[]
+          avatar_current?: Json | null
+          avatar_goal?: Json | null
           created_at?: string
           dietary_restrictions?: string[]
           disclaimer_accepted_at?: string | null
@@ -375,6 +379,8 @@ export type Database = {
           activity_level?: string | null
           age?: number | null
           allergies?: string[]
+          avatar_current?: Json | null
+          avatar_goal?: Json | null
           created_at?: string
           dietary_restrictions?: string[]
           disclaimer_accepted_at?: string | null

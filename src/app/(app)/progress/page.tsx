@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircle2, XCircle, Minus, Images, Flag, Trophy } from "lucide-react";
+import { CheckCircle2, XCircle, Minus, Images, Flag, Trophy, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getServerDictionary } from "@/lib/i18n/serverLocale";
 import { format } from "@/lib/i18n/format";
@@ -226,6 +226,15 @@ export default async function ProgressPage() {
           <span className="flex items-center gap-2 text-sm font-bold">
             <Trophy strokeWidth={1.8} className="h-4 w-4 text-[var(--color-accent)]" />
             {t.progress.wrappedLink}
+          </span>
+        </Card>
+      </Link>
+
+      <Link href="/progress/avatar">
+        <Card className="flex items-center justify-between transition-all hover:translate-y-[-1px]">
+          <span className="flex items-center gap-2 text-sm font-bold">
+            <Sparkles strokeWidth={1.8} className="h-4 w-4 text-[var(--color-accent)]" />
+            {t.progress.avatarLink}
           </span>
         </Card>
       </Link>
