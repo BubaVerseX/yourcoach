@@ -18,6 +18,7 @@ import { WorkoutCompleteButton } from "@/components/WorkoutCompleteButton";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { ExerciseSwapPanel } from "@/components/ExerciseSwapPanel";
 import { WorkoutDayFrictionControls } from "@/components/WorkoutDayFrictionControls";
+import { ExerciseMuscleDiagram } from "@/components/ExerciseMuscleDiagram";
 
 export default async function WorkoutDayPage({
   params,
@@ -124,6 +125,10 @@ export default async function WorkoutDayPage({
                         {localizedField(exercise, "instructions", "instructions_ka", locale)}
                       </p>
                     )}
+                    <ExerciseMuscleDiagram
+                      primaryMuscles={exercise.primary_muscles}
+                      secondaryMuscles={exercise.secondary_muscles}
+                    />
                     <div className="mt-1">
                       <ExerciseSwapPanel weekStart={weekStart} day={dayKey} exerciseIndex={i} />
                     </div>

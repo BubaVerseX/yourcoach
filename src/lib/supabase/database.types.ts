@@ -87,6 +87,8 @@ export type Database = {
           muscle_group: string
           name: string
           name_ka: string | null
+          primary_muscles: string[]
+          secondary_muscles: string[]
           setting: string
           video_url: string | null
         }
@@ -106,6 +108,8 @@ export type Database = {
           muscle_group: string
           name: string
           name_ka?: string | null
+          primary_muscles?: string[]
+          secondary_muscles?: string[]
           setting: string
           video_url?: string | null
         }
@@ -125,6 +129,8 @@ export type Database = {
           muscle_group?: string
           name?: string
           name_ka?: string | null
+          primary_muscles?: string[]
+          secondary_muscles?: string[]
           setting?: string
           video_url?: string | null
         }
