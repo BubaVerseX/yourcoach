@@ -84,6 +84,7 @@ export type Database = {
           image_url: string | null
           instructions: string | null
           instructions_ka: string | null
+          movement_pattern: string
           muscle_group: string
           name: string
           name_ka: string | null
@@ -105,6 +106,7 @@ export type Database = {
           image_url?: string | null
           instructions?: string | null
           instructions_ka?: string | null
+          movement_pattern?: string
           muscle_group: string
           name: string
           name_ka?: string | null
@@ -126,6 +128,7 @@ export type Database = {
           image_url?: string | null
           instructions?: string | null
           instructions_ka?: string | null
+          movement_pattern?: string
           muscle_group?: string
           name?: string
           name_ka?: string | null

@@ -252,6 +252,11 @@ const en = {
         abductors: "Outer thighs",
       },
     },
+    avatarDemo: {
+      show: "Watch it move",
+      hide: "Hide animation",
+      caption: "A generic reference figure showing the movement pattern and muscles trained — not a demonstration video of this exact exercise.",
+    },
   },
   templates: {
     title: "Workout templates",

@@ -19,6 +19,8 @@ import { FavoriteButton } from "@/components/FavoriteButton";
 import { ExerciseSwapPanel } from "@/components/ExerciseSwapPanel";
 import { WorkoutDayFrictionControls } from "@/components/WorkoutDayFrictionControls";
 import { ExerciseMuscleDiagram } from "@/components/ExerciseMuscleDiagram";
+import { ExerciseAvatarAnimation } from "@/components/ExerciseAvatarAnimation";
+import type { MovementPattern } from "@/lib/avatar/animation";
 
 export default async function WorkoutDayPage({
   params,
@@ -130,6 +132,11 @@ export default async function WorkoutDayPage({
                       </p>
                     )}
                     <ExerciseMuscleDiagram
+                      primaryMuscles={exercise.primary_muscles}
+                      secondaryMuscles={exercise.secondary_muscles}
+                    />
+                    <ExerciseAvatarAnimation
+                      pattern={exercise.movement_pattern as MovementPattern}
                       primaryMuscles={exercise.primary_muscles}
                       secondaryMuscles={exercise.secondary_muscles}
                     />

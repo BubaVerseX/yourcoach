@@ -8,10 +8,10 @@ import { buildHumanoid } from "@/lib/avatar/buildHumanoid";
 import type { AvatarParams } from "@/lib/avatar/types";
 
 function HumanoidModel({ params }: { params: AvatarParams }) {
-  const group = useMemo(() => buildHumanoid(params), [params]);
+  const rig = useMemo(() => buildHumanoid(params), [params]);
   const ref = useRef<THREE.Group>(null);
 
-  return <primitive ref={ref} object={group} />;
+  return <primitive ref={ref} object={rig.group} />;
 }
 
 /**
