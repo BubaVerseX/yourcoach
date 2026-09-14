@@ -6,8 +6,9 @@ import { generateMealPlanData, type MealPlanData } from "@/lib/plan/mealPlan";
 import { generateWorkoutPlanData, type WorkoutPlanData } from "@/lib/plan/workoutPlan";
 import { calculateBMR, calculateCalorieTarget, calculateMacros, calculateTDEE, type MacroTargets } from "@/lib/plan/nutrition";
 import { generateAiPlan } from "./generateAiPlan";
-import { computeWeightProjection, PROJECTION_HORIZON_WEEKS } from "./projection";
+import { buildFormulaMilestones, computeWeightProjection, PROJECTION_HORIZON_WEEKS } from "./projection";
 import { hasChangedMeaningfully, snapshotFromProfile, type ProfileSnapshot } from "./regenerationCap";
+import type { Locale } from "@/lib/i18n";
 
 export type { ProfileSnapshot };
 
@@ -85,7 +86,7 @@ export async function ensureAiPlan(userId: string): Promise<AiPlanRow | null> {
     mealPlanData = formulaMeal.planData;
     const setting = (profile.equipment_setting ?? "home") as "home" | "gym" | "both";
     workoutPlanData = generateWorkoutPlanData(profile, exercises, weekStart, setting, favoriteExerciseIds);
-    milestones = [];
+    milestones = buildFormulaMilestones(series, weeklyDeltaKg, (profile.locale ?? "en") as Locale);
     modelId = null;
   }
 

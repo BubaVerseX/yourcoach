@@ -1,3 +1,10 @@
+import { format } from "../i18n/format.ts";
+import type { Locale } from "@/lib/i18n";
+import en from "../i18n/dictionaries/en.ts";
+import ka from "../i18n/dictionaries/ka.ts";
+
+const dictionaries = { en, ka };
+
 export const PROJECTION_HORIZON_WEEKS = 12;
 /** Rough Wishnofsky rule of thumb: ~7700 kcal of sustained deficit/surplus
  * per kg of body-fat change. A simplification (ignores lean-mass shifts,
@@ -27,4 +34,30 @@ export function computeWeightProjection(
   }
 
   return { weeklyDeltaKg, series };
+}
+
+/** Non-AI milestone narration — grounded in the same deterministic series
+ * computeWeightProjection produces, used whenever the AI call is unavailable
+ * or fails (see ensureAiPlan) so premium users always see a projection with
+ * milestones, never just an empty list. */
+export function buildFormulaMilestones(
+  series: ProjectionPoint[],
+  weeklyDeltaKg: number,
+  locale: Locale
+): { weekLabel: string; text: string }[] {
+  const t = dictionaries[locale];
+  const horizonWeeks = series.length ? series[series.length - 1].week : 0;
+  if (horizonWeeks < 1) return [];
+
+  const checkpoints = [...new Set([0.25, 0.5, 0.75, 1].map((f) => Math.max(1, Math.round(horizonWeeks * f))))];
+
+  return checkpoints.map((week) => {
+    const point = series.find((p) => p.week === week) ?? series[series.length - 1];
+    const weekLabel = format(t.progress.journeyWeekShort, { n: week });
+    const text =
+      Math.abs(weeklyDeltaKg) < 0.05
+        ? format(t.progress.formulaMilestoneMaintain, { week })
+        : format(t.progress.formulaMilestoneWeight, { week, weight: point.weightKg });
+    return { weekLabel, text };
+  });
 }

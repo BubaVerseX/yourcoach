@@ -299,6 +299,8 @@ const ka: Dictionary = {
     projectedSubtitle: "შენი მიმდინარე გეგმის მიხედვით, მომდევნო {weeks} კვირაში",
     projectedLegend: "პროგნოზი",
     milestones: "ეტაპები",
+    formulaMilestoneWeight: "{week}-ე კვირისთვის, გეგმის მიხედვით მიაღწევ {weight} კგ-ს.",
+    formulaMilestoneMaintain: "{week}-ე კვირისთვის, სტაბილურად შეინარჩუნებ საკვები რაციონის გეგმას.",
     celebrationStreakHeadline: "{days} დღიანი სერია",
     celebrationStreakDetail: "{days} დღის განმავლობაში ზედიზედ იყავი აქტიური. განაგრძე ასე.",
     celebrationWeightHeadline: "{kg} კგ-ით უფრო ახლოს მიზანთან",

@@ -297,6 +297,8 @@ const en = {
     projectedSubtitle: "Based on your current plan, over the next {weeks} weeks",
     projectedLegend: "Projected",
     milestones: "Milestones",
+    formulaMilestoneWeight: "By week {week}, you're on track to reach {weight} kg.",
+    formulaMilestoneMaintain: "By week {week}, you'll have held steady on your maintenance plan.",
     celebrationStreakHeadline: "{days}-day streak",
     celebrationStreakDetail: "You've shown up {days} days in a row. Keep it going.",
     celebrationWeightHeadline: "{kg} kg closer to your goal",
