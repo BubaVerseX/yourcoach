@@ -36,6 +36,9 @@ export async function getOrCreateWeekPlans(userId: string, weekStart: string): P
       .maybeSingle(),
   ]);
 
+  // KNOWN ISSUE (Phase 0 QA, not fixed here): this short-circuits before ever
+  // calling ensureAiPlan/generatePlan once a week's rows exist, so a profile
+  // edit mid-week never triggers regeneration until the next fresh week.
   if (mealRow && workoutRow) {
     return {
       mealPlan: {
