@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-const FROM_ADDRESS = "Vellio <onboarding@resend.dev>";
+const FROM_ADDRESS = "ShadowCoach <onboarding@resend.dev>";
 
 /**
  * Thin wrapper around Resend. Returns { skipped: true } when RESEND_API_KEY

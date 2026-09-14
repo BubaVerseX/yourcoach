@@ -4,7 +4,7 @@ import ka from "@/lib/i18n/dictionaries/ka";
 
 const dictionaries = { en, ka };
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://vellio.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://livehealthy-sepia.vercel.app";
 
 function wrap(locale: Locale, title: string, body: string, ctaLabel: string, ctaHref: string) {
   return `

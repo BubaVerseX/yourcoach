@@ -5,7 +5,7 @@ import { LocaleProvider, type Locale } from "@/lib/i18n";
 import { anton, notoSansGeorgian, jetbrainsMono } from "@/lib/fonts";
 
 export const metadata: Metadata = {
-  title: "Vellio — Your body, your plan",
+  title: "ShadowCoach — Your body, your plan",
   description:
     "Personalized eating and workout plans built from your own data. Not medical advice — always consult a doctor.",
 };
