@@ -23,6 +23,12 @@ export default function DisclaimerPage() {
           {t.disclaimer.body}
         </p>
       </Card>
+      <Card>
+        <h2 className="mb-4 text-2xl font-extrabold tracking-tight">{t.disclaimer.aiTitle}</h2>
+        <p className="text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+          {t.disclaimer.aiBody}
+        </p>
+      </Card>
     </div>
   );
 }

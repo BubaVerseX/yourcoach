@@ -568,6 +568,7 @@ export function GetStartedFlow() {
                     </span>
                     {t.disclaimer.body}
                     <br />
+                    <span className="mt-2 block">{t.disclaimer.aiShortNote}</span>
                     <Link href="/legal/disclaimer" className="font-semibold text-[var(--color-accent)]">
                       {t.nav.disclaimer}
                     </Link>
