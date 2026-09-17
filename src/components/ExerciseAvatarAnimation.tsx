@@ -7,7 +7,7 @@ import { ExerciseAvatarViewer } from "@/components/avatar/ExerciseAvatarViewer";
 import type { MovementPattern } from "@/lib/avatar/animation";
 
 /**
- * The distinctive, ShadowCoach-only element on the exercise detail view: a
+ * The distinctive, YourCoach-only element on the exercise detail view: a
  * generic avatar looping the movement pattern this exercise most resembles,
  * with the muscles it trains glowing in the app's own accent colors.
  * Collapsed by default and the three.js scene is lazy-loaded (see

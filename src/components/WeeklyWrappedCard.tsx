@@ -125,7 +125,7 @@ export function WeeklyWrappedCard({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "shadowcoach-weekly-wrapped.png";
+      a.download = "yourcoach-weekly-wrapped.png";
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -133,7 +133,7 @@ export function WeeklyWrappedCard({
 
   function handleShare() {
     renderToBlob(async (blob) => {
-      const file = new File([blob], "shadowcoach-weekly-wrapped.png", { type: "image/png" });
+      const file = new File([blob], "yourcoach-weekly-wrapped.png", { type: "image/png" });
       if (typeof navigator.share === "function" && navigator.canShare?.({ files: [file] })) {
         try {
           await navigator.share({ files: [file], title: t.common.appName });
@@ -145,7 +145,7 @@ export function WeeklyWrappedCard({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "shadowcoach-weekly-wrapped.png";
+      a.download = "yourcoach-weekly-wrapped.png";
       a.click();
       URL.revokeObjectURL(url);
     });

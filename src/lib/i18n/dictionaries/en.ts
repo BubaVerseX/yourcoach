@@ -1,6 +1,6 @@
 const en = {
   common: {
-    appName: "ShadowCoach",
+    appName: "YourCoach",
     save: "Save",
     cancel: "Cancel",
     next: "Next",
@@ -36,7 +36,7 @@ const en = {
   landing: {
     heroHeadline: "There is no off-season.",
     subhead:
-      "ShadowCoach builds a personalized eating and workout plan from your own data — no guesswork, no generic templates.",
+      "YourCoach builds a personalized eating and workout plan from your own data — no guesswork, no generic templates.",
     cta: "Start training",
     login: "I already have an account",
     feature1Title: "Built around you",
@@ -63,7 +63,7 @@ const en = {
   },
   disclaimer: {
     title: "Medical disclaimer",
-    body: "ShadowCoach provides general fitness and nutrition information generated from the data you provide. It is not medical advice, diagnosis, or treatment, and it is not a substitute for consulting a qualified doctor, dietitian, or physical therapist. Always consult a doctor before starting a new eating or exercise plan, especially if you have a medical condition, are pregnant, or are taking medication. Use of this app is at your own risk.",
+    body: "YourCoach provides general fitness and nutrition information generated from the data you provide. It is not medical advice, diagnosis, or treatment, and it is not a substitute for consulting a qualified doctor, dietitian, or physical therapist. Always consult a doctor before starting a new eating or exercise plan, especially if you have a medical condition, are pregnant, or are taking medication. Use of this app is at your own risk.",
     accept: "I understand this is not medical advice",
     mustAccept: "Please confirm you understand this before continuing.",
   },
@@ -383,7 +383,7 @@ const en = {
     logout: "Sign out",
   },
   premium: {
-    title: "ShadowCoach Premium",
+    title: "YourCoach Premium",
     subtitle: "AI-generated plans, saved progress, and a projected timeline — built around you.",
     upgradeButton: "Upgrade to Premium",
     priceLabel: "{amount} {currency} / year",
@@ -474,7 +474,7 @@ const en = {
   },
   faq: {
     title: "FAQ",
-    subtitle: "Common questions about how ShadowCoach works.",
+    subtitle: "Common questions about how YourCoach works.",
     items: {
       how_generated: {
         question: "How are my plans generated?",
@@ -485,7 +485,7 @@ const en = {
         answer: "We ask for basics like age, weight, height, and activity level to calculate calorie and macro targets, plus your goal, equipment access, and dietary restrictions to filter what we recommend. Medical conditions are optional and only used to help you make informed choices — we don't diagnose or treat anything.",
       },
       is_it_free: {
-        question: "Is ShadowCoach free?",
+        question: "Is YourCoach free?",
         answer: "You can complete the intake quiz and see a real preview of your plan — your calorie target and one sample meal — for free. Saving your plan, seeing the rest of your week, and tracking progress requires a subscription (20 GEL/year).",
       },
       how_swap_favorites: {
@@ -506,7 +506,7 @@ const en = {
       },
       medical_conditions: {
         question: "What if I have a medical condition?",
-        answer: "ShadowCoach is not a substitute for medical advice. If you have a health condition, are pregnant, or take medication, talk to a doctor before starting a new eating or exercise plan — see the full disclaimer for details.",
+        answer: "YourCoach is not a substitute for medical advice. If you have a health condition, are pregnant, or take medication, talk to a doctor before starting a new eating or exercise plan — see the full disclaimer for details.",
       },
     },
   },
