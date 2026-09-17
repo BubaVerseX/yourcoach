@@ -260,6 +260,11 @@ const en = {
       hide: "Hide animation",
       caption: "A generic reference figure showing the movement pattern and muscles trained — not a demonstration video of this exact exercise.",
     },
+    gifDemo: {
+      show: "Real demo",
+      hide: "Hide demo",
+      caption: "Real exercise demonstration.",
+    },
   },
   templates: {
     title: "Workout templates",

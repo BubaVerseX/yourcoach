@@ -20,6 +20,7 @@ import { ExerciseSwapPanel } from "@/components/ExerciseSwapPanel";
 import { WorkoutDayFrictionControls } from "@/components/WorkoutDayFrictionControls";
 import { ExerciseMuscleDiagram } from "@/components/ExerciseMuscleDiagram";
 import { ExerciseAvatarAnimation } from "@/components/ExerciseAvatarAnimation";
+import { ExerciseGifDemo } from "@/components/ExerciseGifDemo";
 import type { MovementPattern } from "@/lib/avatar/animation";
 
 export default async function WorkoutDayPage({
@@ -131,6 +132,7 @@ export default async function WorkoutDayPage({
                         {localizedField(exercise, "instructions", "instructions_ka", locale)}
                       </p>
                     )}
+                    <ExerciseGifDemo exerciseGifUrl={exercise.exercise_gif_url} />
                     <ExerciseMuscleDiagram
                       primaryMuscles={exercise.primary_muscles}
                       secondaryMuscles={exercise.secondary_muscles}

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Tables } from "@/lib/supabase/database.types";
 import { ensureRecipeImages, ensureExerciseImages } from "@/lib/images/ensureImages";
+import { ensureExerciseGifs } from "@/lib/exercises/ensureExerciseGifs";
 
 export async function getRecipesByIds(ids: string[]): Promise<Map<string, Tables<"recipes">>> {
   const uniqueIds = [...new Set(ids)].filter(Boolean);
@@ -18,7 +19,8 @@ export async function getExercisesByIds(ids: string[]): Promise<Map<string, Tabl
 
   const supabase = await createClient();
   const { data } = await supabase.from("exercises").select("*").in("id", uniqueIds);
-  const exercises = await ensureExerciseImages(data ?? []);
+  const withImages = await ensureExerciseImages(data ?? []);
+  const { exercises } = await ensureExerciseGifs(withImages);
   return new Map(exercises.map((e) => [e.id, e]));
 }
 
