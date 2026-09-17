@@ -486,7 +486,7 @@ const en = {
       },
       is_it_free: {
         question: "Is YourCoach free?",
-        answer: "You can complete the intake quiz and see a real preview of your plan — your calorie target and one sample meal — for free. Saving your plan, seeing the rest of your week, and tracking progress requires a subscription (20 GEL/year).",
+        answer: "You can complete the intake quiz and see a real preview of your plan — your calorie target and one sample meal — for free. Saving your plan, seeing the rest of your week, and tracking progress requires a subscription (10 GEL/year).",
       },
       how_swap_favorites: {
         question: "How do swapping and favorites work?",
