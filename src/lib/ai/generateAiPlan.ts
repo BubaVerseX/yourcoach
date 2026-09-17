@@ -31,7 +31,8 @@ function buildPrompt(
   calorieTarget: number,
   macros: MacroTargets,
   weeklyDeltaKg: number,
-  horizonWeeks: number
+  horizonWeeks: number,
+  adherencePercent: number | null
 ) {
   const recipePool = recipes.map((r) => ({
     id: r.id,
@@ -57,6 +58,19 @@ function buildPrompt(
       ? "The plan is calorie-neutral (maintenance) — do not project any weight change; ground milestones in consistency, strength, and energy instead."
       : `At this calorie target vs. estimated maintenance, the projected trajectory is about ${Math.abs(weeklyDeltaKg)} kg ${weeklyDeltaKg < 0 ? "lost" : "gained"} per week over ${horizonWeeks} weeks.`;
 
+  // Only ever the real, logged-this-week percentage computed by
+  // lib/plan/adherence.ts — null (no note at all) when there isn't enough
+  // logged history yet, since a fabricated adherence claim would undercut
+  // the whole point of grounding these in real data.
+  const adherenceNote =
+    adherencePercent === null
+      ? ""
+      : adherencePercent >= 80
+        ? `\n\nThis person has actually followed their plan closely this week (${adherencePercent}% of planned meals/workouts logged) — you may warmly acknowledge that real follow-through in at most one milestone, briefly and without overstating it.`
+        : adherencePercent <= 40
+          ? `\n\nLogging has been sparse this week (${adherencePercent}% of planned meals/workouts logged) — you may gently note that showing up and logging matters more than the plan itself, in at most one milestone, without shaming or guilt-tripping.`
+          : "";
+
   return `Build a 7-day meal plan and workout plan for this person, selecting only from the provided recipe/exercise pools by id — never invent an id.
 
 Profile:
@@ -80,7 +94,7 @@ ${JSON.stringify(exercisePool)}
 
 Workout guidance: pick a sensible number of training days for the stated time budget and goal (mix rest days in), and for each training day set "focus" to the dominant muscle group trained and list 3-6 exercise ids from the pool matching that focus (or a full_body mix for full_body days).
 
-Progress milestones: ${trajectoryNote} Write 3-5 short, text-only milestones tied to realistic points in the plan (e.g. specific weeks or habits) — grounded in the plan and the numbers above. Frame each one like a short Georgian toast: open with a brief, warm, slightly poetic line (e.g. "To the week that pushed you further —"), then land on the real grounded number or fact it's tied to. Keep it brief — one toast-like sentence, not a speech. Never describe or imply a change in physical appearance.`;
+Progress milestones: ${trajectoryNote}${adherenceNote} Write 3-5 short, text-only milestones tied to realistic points in the plan (e.g. specific weeks or habits) — grounded in the plan and the numbers above. Frame each one like a short Georgian toast: open with a brief, warm, slightly poetic line (e.g. "To the week that pushed you further —"), then land on the real grounded number or fact it's tied to. Keep it brief — one toast-like sentence, not a speech. Never describe or imply a change in physical appearance.`;
 }
 
 /**
@@ -97,7 +111,8 @@ export async function generateAiPlan(
   calorieTarget: number,
   macros: MacroTargets,
   weeklyDeltaKg: number,
-  horizonWeeks: number
+  horizonWeeks: number,
+  adherencePercent: number | null = null
 ): Promise<AiPlanResult | null> {
   if (!process.env.ANTHROPIC_API_KEY) return null;
 
@@ -127,7 +142,8 @@ export async function generateAiPlan(
             calorieTarget,
             macros,
             weeklyDeltaKg,
-            horizonWeeks
+            horizonWeeks,
+            adherencePercent
           ),
         },
       ],

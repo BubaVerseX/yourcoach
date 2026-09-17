@@ -10,6 +10,7 @@ import { getRecipesByIds, getExercisesByIds, mealIdsFromDay } from "@/lib/plan/l
 import { portionFor } from "@/lib/plan/mealPlan";
 import { localizedField } from "@/lib/plan/localized";
 import { computeWorkoutStreak } from "@/lib/plan/streak";
+import { getWeekAdherence } from "@/lib/plan/adherence";
 import { caloriesToKhinkali, estimateWorkoutCalories } from "@/lib/plan/culturalUnits";
 import type { MealLogStatus } from "@/lib/actions/mealFriction";
 import { Card } from "@/components/ui/Card";
@@ -40,6 +41,7 @@ export default async function HomePage() {
   const weekStart = currentWeekStart();
   const todayKey = dayKeyForDate();
   const { mealPlan, workoutPlan, isEphemeral } = await getOrCreateWeekPlans(user.id, weekStart);
+  const adherence = isEphemeral ? null : await getWeekAdherence(user.id, weekStart);
 
   const todayMeals = mealPlan?.planData.days[todayKey];
   const todayWorkout = workoutPlan?.planData.days[todayKey];
@@ -139,6 +141,27 @@ export default async function HomePage() {
         <StatCard value={workoutsCompleted} label={t.progress.workoutsThisWeek} />
         <StatCard value={profile?.goal ? t.onboarding[goalLabelKey(profile.goal)] : "—"} label={t.onboarding.goal} />
       </div>
+
+      {adherence && (
+        <Card>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-sm font-bold text-[var(--color-text-secondary)]">{t.progress.adherenceLabel}</h2>
+              <p className="text-xs text-[var(--color-text-tertiary)]">
+                {adherence.hasData
+                  ? format(t.progress.adherenceDetail, {
+                      logged: adherence.mealsLogged + adherence.workoutsCompleted,
+                      expected: adherence.mealsExpected + adherence.workoutsExpected,
+                    })
+                  : t.progress.adherenceNoData}
+              </p>
+            </div>
+            <span className="text-display text-3xl text-[var(--color-accent)]">
+              {adherence.percent != null ? `${adherence.percent}%` : "—"}
+            </span>
+          </div>
+        </Card>
+      )}
 
       {todayWorkout?.type === "workout" && (
         <MaybeLocked locked={!!isEphemeral}>

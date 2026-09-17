@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Tables } from "@/lib/supabase/database.types";
 import { getFavoriteIds } from "@/lib/actions/favorites";
 import { currentWeekStart } from "@/lib/plan/weekDate";
+import { getWeekAdherence } from "@/lib/plan/adherence";
 import { generateMealPlanData, type MealPlanData } from "@/lib/plan/mealPlan";
 import { generateWorkoutPlanData, type WorkoutPlanData } from "@/lib/plan/workoutPlan";
 import { calculateBMR, calculateCalorieTarget, calculateMacros, calculateTDEE, type MacroTargets } from "@/lib/plan/nutrition";
@@ -55,6 +56,12 @@ export async function ensureAiPlan(userId: string): Promise<AiPlanRow | null> {
   const tdee = bmr ? calculateTDEE(bmr, profile.activity_level) : calorieTarget;
   const { weeklyDeltaKg, series } = computeWeightProjection(profile.weight_kg ?? 70, calorieTarget, tdee);
 
+  const weekStart = currentWeekStart();
+  // Real, logged-so-far adherence for the week currently in progress (before
+  // it gets overwritten by the plan we're about to generate) — grounds the
+  // AI's milestone toasts in actual follow-through rather than guesswork.
+  const adherence = await getWeekAdherence(userId, weekStart);
+
   const aiResult = await generateAiPlan(
     profile,
     recipes,
@@ -62,7 +69,8 @@ export async function ensureAiPlan(userId: string): Promise<AiPlanRow | null> {
     calorieTarget,
     macros,
     weeklyDeltaKg,
-    PROJECTION_HORIZON_WEEKS
+    PROJECTION_HORIZON_WEEKS,
+    adherence.hasData ? adherence.percent : null
   );
 
   let mealPlanData: MealPlanData;
@@ -76,7 +84,6 @@ export async function ensureAiPlan(userId: string): Promise<AiPlanRow | null> {
     milestones = aiResult.milestones;
     modelId = aiResult.modelId;
   } else {
-    const weekStart = currentWeekStart();
     const [favoriteRecipeIds, favoriteExerciseIds] = await Promise.all([
       getFavoriteIds(userId, "recipe"),
       getFavoriteIds(userId, "exercise"),

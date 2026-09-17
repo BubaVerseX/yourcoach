@@ -7,6 +7,8 @@ import { isSubscriptionActive } from "@/lib/premium/access";
 import type { ProjectionData } from "@/lib/ai/ensureAiPlan";
 import { computeWorkoutStreak } from "@/lib/plan/streak";
 import { computeCelebration } from "@/lib/plan/celebration";
+import { getWeekAdherence } from "@/lib/plan/adherence";
+import { currentWeekStart } from "@/lib/plan/weekDate";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { ProgressLogForm } from "@/components/ProgressLogForm";
@@ -30,6 +32,7 @@ export default async function ProgressPage() {
     .single();
 
   const premium = isSubscriptionActive(profile);
+  const adherence = premium ? await getWeekAdherence(user.id, currentWeekStart()) : null;
   const { data: aiPlan } = premium
     ? await supabase.from("ai_plans").select("projection").eq("user_id", user.id).maybeSingle()
     : { data: null };
@@ -135,6 +138,28 @@ export default async function ProgressPage() {
           accent="primary"
         />
       </div>
+
+      {adherence && (
+        <Card>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-extrabold tracking-tight">{t.progress.adherenceTitle}</h2>
+              <p className="text-xs text-[var(--color-text-secondary)]">{t.progress.adherenceSubtitle}</p>
+              <p className="mt-1 text-xs text-[var(--color-text-tertiary)]">
+                {adherence.hasData
+                  ? format(t.progress.adherenceDetail, {
+                      logged: adherence.mealsLogged + adherence.workoutsCompleted,
+                      expected: adherence.mealsExpected + adherence.workoutsExpected,
+                    })
+                  : t.progress.adherenceNoData}
+              </p>
+            </div>
+            <span className="text-display shrink-0 text-4xl text-[var(--color-accent)]">
+              {adherence.percent != null ? `${adherence.percent}%` : "—"}
+            </span>
+          </div>
+        </Card>
+      )}
 
       {celebration && (
         <Card className="flex items-center gap-4">
