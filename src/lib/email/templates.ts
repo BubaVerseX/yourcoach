@@ -12,7 +12,7 @@ function wrap(locale: Locale, title: string, body: string, ctaLabel: string, cta
     <div style="max-width: 480px; margin: 0 auto; background: #f4f6f8; border-radius: 24px; padding: 32px;">
       <h1 style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: #141a21; margin: 0 0 12px;">${title}</h1>
       <p style="font-size: 15px; line-height: 1.6; color: #5c6773; margin: 0 0 20px;">${body}</p>
-      <a href="${ctaHref}" style="display: inline-block; background: #ff5722; color: #fff; font-weight: 700; padding: 12px 24px; border-radius: 16px; text-decoration: none; font-size: 14px;">${ctaLabel}</a>
+      <a href="${ctaHref}" style="display: inline-block; background: #e11d1d; color: #fff; font-weight: 700; padding: 12px 24px; border-radius: 16px; text-decoration: none; font-size: 14px;">${ctaLabel}</a>
     </div>
   </div>`;
 }

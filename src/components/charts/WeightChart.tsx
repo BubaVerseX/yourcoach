@@ -52,16 +52,16 @@ export function WeightChart({ data, projectedData }: { data: Point[]; projectedD
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#ff5722"
+            stroke="#e11d1d"
             strokeWidth={3}
-            dot={{ r: 3, fill: "#ff5722", strokeWidth: 0 }}
+            dot={{ r: 3, fill: "#e11d1d", strokeWidth: 0 }}
             activeDot={{ r: 5 }}
           />
           {hasProjection && (
             <Line
               type="monotone"
               dataKey="projectedWeight"
-              stroke="#0d6efd"
+              stroke="#2dd4bf"
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={false}

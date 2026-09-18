@@ -23,7 +23,7 @@ export default function FaqPage() {
       </div>
 
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight">{t.faq.title}</h1>
+        <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{t.faq.title}</h1>
         <p className="text-sm text-[var(--color-text-secondary)]">{t.faq.subtitle}</p>
       </div>
 

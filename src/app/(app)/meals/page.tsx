@@ -39,7 +39,7 @@ export default async function MealsPage() {
   return (
     <div className="flex flex-col gap-6 py-6">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight">{t.meals.title}</h1>
+        <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{t.meals.title}</h1>
         <p className="text-sm text-[var(--color-text-secondary)]">
           {format(t.meals.weekOf, { date: weekStart })}
         </p>

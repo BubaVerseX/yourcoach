@@ -36,7 +36,7 @@ export default async function WorkoutTemplatesPage() {
       </Link>
 
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight">{t.templates.title}</h1>
+        <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{t.templates.title}</h1>
         <p className="text-sm text-[var(--color-text-secondary)]">{t.templates.subtitle}</p>
       </div>
 

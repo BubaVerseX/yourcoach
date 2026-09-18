@@ -8,7 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /** Sharp rectangle CTAs — no radius, no shadow, ≤150ms transitions.
- * "primary" / "accent" are the solid-orange treatment; "ghost" is the
+ * "primary" / "accent" are the solid-red treatment; "ghost" is the
  * bordered secondary treatment; "selected" is an accent-outlined toggle
  * state (e.g. a chosen option that still reads as a button). */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(

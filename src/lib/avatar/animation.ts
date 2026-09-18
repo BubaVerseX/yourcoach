@@ -147,10 +147,10 @@ export function applyGlow(
   for (const region of ALL_REGIONS) {
     const mat = rig.materials[region];
     if (primaryRegions.includes(region)) {
-      mat.emissive.set(0xff5722);
+      mat.emissive.set(0xe11d1d);
       mat.emissiveIntensity = pulse;
     } else if (secondaryRegions.includes(region)) {
-      mat.emissive.set(0x0d6efd);
+      mat.emissive.set(0x2dd4bf);
       mat.emissiveIntensity = pulse * 0.75;
     } else {
       mat.emissiveIntensity = 0;

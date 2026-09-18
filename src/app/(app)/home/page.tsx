@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Flame, UtensilsCrossed, Dumbbell, Scale, Utensils } from "lucide-react";
+import { Flame, UtensilsCrossed, Dumbbell, Scale, Utensils, Clock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getServerDictionary } from "@/lib/i18n/serverLocale";
 import en from "@/lib/i18n/dictionaries/en";
@@ -108,7 +108,7 @@ export default async function HomePage() {
       <div className="flex items-center justify-between gap-4">
         <div>
           <span className="text-mono-label block text-[10px] text-[var(--color-text-tertiary)]">{weekday}</span>
-          <h1 className="text-[26px] font-black tracking-[-0.03em] text-[var(--color-text-primary)]">
+          <h1 className="gradient-text-signature text-[26px] font-black tracking-[-0.03em]">
             {t.common.today}
           </h1>
         </div>
@@ -166,7 +166,7 @@ export default async function HomePage() {
       {todayWorkout?.type === "workout" && (
         <MaybeLocked locked={!!isEphemeral}>
           <div className="flex flex-col gap-3">
-            <div className="relative h-[250px] w-full overflow-hidden">
+            <div className="card-activity relative h-[250px] w-full">
               <DuotonePhoto
                 src={featuredExercise?.image_url}
                 alt=""
@@ -176,8 +176,12 @@ export default async function HomePage() {
               <span className="text-mono-label absolute top-4 left-4 z-10 bg-[var(--color-accent)] px-2.5 py-1 text-[9px] text-[var(--color-bg)]">
                 TODAY&apos;S SESSION
               </span>
+              <span className="text-mono-label absolute top-4 right-4 z-10 flex items-center gap-1 bg-black/60 px-2.5 py-1 text-[9px] text-[var(--color-text-primary)]">
+                <Clock strokeWidth={2} className="h-3 w-3" />
+                {format(t.home.approxDuration, { minutes: profile?.time_available_minutes ?? 30 })}
+              </span>
               <div className="absolute right-0 bottom-0 left-0 z-10 p-4">
-                <h2 className="text-display text-[36px] text-[var(--color-text-primary)] md:text-[44px]">
+                <h2 className="text-display gradient-text-signature text-[36px] md:text-[44px]">
                   {(en.workouts.muscleGroups[todayWorkout.focus as keyof typeof en.workouts.muscleGroups] ??
                     todayWorkout.focus
                   ).toUpperCase()}

@@ -17,9 +17,9 @@ interface BlobImageProps {
 }
 
 const GRADIENTS = [
-  "linear-gradient(135deg, #ff5722 0%, #ff8a50 100%)",
-  "linear-gradient(135deg, #0d6efd 0%, #4c9aff 100%)",
-  "linear-gradient(135deg, #ff5722 0%, #0d6efd 100%)",
+  "linear-gradient(135deg, #e11d1d 0%, #f04444 100%)",
+  "linear-gradient(135deg, #2dd4bf 0%, #67e8dd 100%)",
+  "linear-gradient(135deg, #e11d1d 0%, #2dd4bf 100%)",
 ];
 
 export function BlobImage({

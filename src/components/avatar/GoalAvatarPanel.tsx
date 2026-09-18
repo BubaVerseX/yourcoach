@@ -131,7 +131,7 @@ export function GoalAvatarPanel({
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h1 className="text-[26px] font-black tracking-[-0.03em] text-[var(--color-text-primary)]">
+        <h1 className="gradient-text-signature text-[26px] font-black tracking-[-0.03em]">
           {tt.title}
         </h1>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{tt.subtitle}</p>
@@ -168,7 +168,7 @@ export function GoalAvatarPanel({
               <AvatarViewer
                 params={saved.goal!}
                 className="h-[360px] w-full bg-[var(--color-bg)]"
-                accentHex="#0d6efd"
+                accentHex="#2dd4bf"
               />
             </div>
           </div>
@@ -238,7 +238,7 @@ export function GoalAvatarPanel({
               <AvatarViewer
                 params={draft}
                 className="h-[360px] w-full bg-[var(--color-bg)]"
-                accentHex={slot === "goal" ? "#0d6efd" : "#ff5722"}
+                accentHex={slot === "goal" ? "#2dd4bf" : "#e11d1d"}
               />
             )}
 

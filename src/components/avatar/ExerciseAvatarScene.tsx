@@ -53,7 +53,7 @@ export function ExerciseAvatarScene({
     >
       <ambientLight intensity={0.5} />
       <directionalLight position={[1.5, 2.5, 2]} intensity={1} castShadow shadow-mapSize={[1024, 1024]} />
-      <directionalLight position={[-2, 1, -1.5]} intensity={0.3} color="#0d6efd" />
+      <directionalLight position={[-2, 1, -1.5]} intensity={0.3} color="#2dd4bf" />
       <AnimatedHumanoid pattern={pattern} primaryMuscles={primaryMuscles} secondaryMuscles={secondaryMuscles} />
       <ContactShadows position={[0, -1.05, 0]} opacity={0.4} blur={2.2} far={1.6} />
       <OrbitControls

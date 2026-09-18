@@ -41,7 +41,7 @@ export default async function GroceryListPage() {
         <span className="text-mono-label block text-[10px] text-[var(--color-text-tertiary)]">
           {format(t.grocery.weekOf, { date: weekStart }).toUpperCase()}
         </span>
-        <h1 className="text-[26px] font-black tracking-[-0.03em] text-[var(--color-text-primary)]">
+        <h1 className="gradient-text-signature text-[26px] font-black tracking-[-0.03em]">
           {t.grocery.title}
         </h1>
       </div>

@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
 /* ============================================================
-   YourCoach v3 — bold sports-editorial system.
-   Dark field, hard edges, orange/blue duotone, no elevation.
+   YourCoach v7 — Valhalla-style system.
+   Near-black field, hard edges, red-to-teal signature gradient,
+   sparse particle texture. Replaces the v3 orange/blue duotone —
+   see AGENTS build history for the prior system.
    ============================================================ */
 
 :root {
   /* Background */
-  --color-bg: #0a0c0f;
-  --color-bg-deep: #06080a;
-  --color-surface: #14181d;
+  --color-bg: #0a0a0a;
+  --color-bg-deep: #020202;
+  --color-surface: #121212;
 
   /* Text */
   --color-text-primary: #ffffff;
@@ -17,13 +19,21 @@
   --color-text-tertiary: rgba(255, 255, 255, 0.4);
 
   /* Accent */
-  --color-accent: #ff5722;
-  --color-accent-hover: #ff6c3d;
-  --color-accent-2: #0d6efd;
+  --color-accent: #e11d1d;
+  --color-accent-hover: #f04444;
+  --color-accent-2: #2dd4bf;
+
+  /* Signature red->teal gradient stops — mirrors the reference site's
+     4-stop gradient (red deepening into red, then teal lightening out
+     of teal) rather than a flat 2-color blend. Used by .gradient-text-signature. */
+  --color-gradient-red-1: #cc0000;
+  --color-gradient-red-2: #e11d1d;
+  --color-gradient-teal-1: #42c2ca;
+  --color-gradient-teal-2: #2dd4bf;
 
   /* Duotone / photography */
-  --color-duotone-a: #0d2b5e;
-  --color-duotone-b: #123a7a;
+  --color-duotone-a: #3a0a0a;
+  --color-duotone-b: #0f4a45;
   --color-neutral-3: #f2f2f0;
 
   /* Supra mode (warm, celebratory — never mixed with the main palette) */
@@ -57,6 +67,10 @@
   --color-accent: var(--color-accent);
   --color-accent-hover: var(--color-accent-hover);
   --color-accent-2: var(--color-accent-2);
+  --color-gradient-red-1: var(--color-gradient-red-1);
+  --color-gradient-red-2: var(--color-gradient-red-2);
+  --color-gradient-teal-1: var(--color-gradient-teal-1);
+  --color-gradient-teal-2: var(--color-gradient-teal-2);
   --color-duotone-a: var(--color-duotone-a);
   --color-duotone-b: var(--color-duotone-b);
   --color-neutral-3: var(--color-neutral-3);
@@ -128,7 +142,7 @@ li {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border: 1px dashed rgba(255, 87, 34, 0.6);
+  border: 1px dashed rgba(225, 29, 29, 0.6);
   color: var(--color-text-secondary);
   padding: 2px 6px;
 }
@@ -238,30 +252,29 @@ button.soft-raised:active,
 /* ============================================================
    Gradient energy — for hero/featured surfaces and card accents
    only (per design spec, body/content stays flat). Built from the
-   same orange/blue accent pair used in BlobImage's fallback
-   gradients, just softened for use as washes/tints rather than
-   solid fills.
+   red/teal signature pair, softened for use as washes/tints rather
+   than solid fills.
    ============================================================ */
 
 .gradient-wash-warm {
-  background: radial-gradient(120% 100% at 15% 0%, rgba(255, 87, 34, 0.14) 0%, rgba(255, 87, 34, 0) 60%);
+  background: radial-gradient(120% 100% at 15% 0%, rgba(225, 29, 29, 0.14) 0%, rgba(225, 29, 29, 0) 60%);
 }
 
 .gradient-wash-cool {
-  background: radial-gradient(120% 100% at 85% 100%, rgba(13, 110, 253, 0.12) 0%, rgba(13, 110, 253, 0) 60%);
+  background: radial-gradient(120% 100% at 85% 100%, rgba(45, 212, 191, 0.12) 0%, rgba(45, 212, 191, 0) 60%);
 }
 
 .gradient-wash-mixed {
-  background: radial-gradient(110% 90% at 10% 0%, rgba(255, 87, 34, 0.13) 0%, transparent 55%),
-    radial-gradient(110% 90% at 90% 100%, rgba(13, 110, 253, 0.11) 0%, transparent 55%);
+  background: radial-gradient(110% 90% at 10% 0%, rgba(225, 29, 29, 0.13) 0%, transparent 55%),
+    radial-gradient(110% 90% at 90% 100%, rgba(45, 212, 191, 0.11) 0%, transparent 55%);
 }
 
 .gradient-tint-primary {
-  background: linear-gradient(135deg, rgba(255, 87, 34, 0.14) 0%, rgba(255, 87, 34, 0.03) 100%);
+  background: linear-gradient(135deg, rgba(225, 29, 29, 0.14) 0%, rgba(225, 29, 29, 0.03) 100%);
 }
 
 .gradient-tint-secondary {
-  background: linear-gradient(135deg, rgba(13, 110, 253, 0.14) 0%, rgba(13, 110, 253, 0.03) 100%);
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.14) 0%, rgba(45, 212, 191, 0.03) 100%);
 }
 
 .gradient-text-mixed {
@@ -271,16 +284,43 @@ button.soft-raised:active,
   color: transparent;
 }
 
+/* The signature headline treatment — the 4-stop red-deepening-into-
+   teal-lightening gradient, matching the Valhalla Echo Fitness
+   reference exactly (confirmed via computed styles: linear-gradient(
+   90deg, #cc0000, #e11d1d, #42c2ca, #2dd4bf)). Reserve for major
+   headlines and the wordmark, never body text — same restraint the
+   reference site itself uses. */
+.gradient-text-signature {
+  /* display: inline-block (not the element's default block/inline) is load-
+     bearing: the gradient background paints across the full box width, and
+     a block-level heading's box is as wide as its container regardless of
+     how much text it holds — sizing to content is what makes the gradient
+     actually span the visible glyphs instead of mostly bleeding into empty
+     space to the right of a short, left-aligned headline. */
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--color-gradient-red-1) 0%,
+    var(--color-gradient-red-2) 35%,
+    var(--color-gradient-teal-1) 65%,
+    var(--color-gradient-teal-2) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
 /* Stronger diagonal duotone for the landing hero specifically — more
    saturated than the wash utilities above, which stay subtle for
    content surfaces. */
 .gradient-hero-duotone {
   background: linear-gradient(
     135deg,
-    rgba(255, 87, 34, 0.32) 0%,
-    rgba(255, 138, 80, 0.16) 32%,
-    rgba(13, 110, 253, 0.14) 68%,
-    rgba(13, 110, 253, 0.3) 100%
+    rgba(225, 29, 29, 0.32) 0%,
+    rgba(240, 68, 68, 0.16) 32%,
+    rgba(45, 212, 191, 0.14) 68%,
+    rgba(45, 212, 191, 0.3) 100%
   );
 }
 
@@ -292,6 +332,54 @@ button.soft-raised:active,
   filter: blur(46px);
   pointer-events: none;
   z-index: 0;
+}
+
+/* ============================================================
+   Valhalla-style card treatments (v7 redesign).
+   ============================================================ */
+
+/* Activity/exercise card: dark photo background, thin accent bars
+   along the left/right edges, name overlaid centrally in the
+   signature gradient, small duration badge top-right. Matches the
+   reference site's /activities cards. */
+.card-activity {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-bg-deep);
+  border-left: 3px solid var(--color-accent);
+  border-right: 3px solid var(--color-accent);
+}
+
+.card-activity::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.75) 100%);
+  pointer-events: none;
+}
+
+/* Small icon + label + value info block — matches the reference
+   site's contact cards (icon in a small tinted box, uppercase gray
+   label, bold white value). */
+.card-info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(225, 29, 29, 0.12);
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   Particle field — sparse, faint dot texture behind dark
+   backgrounds (see components/ui/ParticleField.tsx). Fixed behind
+   all page content, never interactive.
+   ============================================================ */
+
+.particle-field-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* ============================================================

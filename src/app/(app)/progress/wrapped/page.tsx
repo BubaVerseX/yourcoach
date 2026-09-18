@@ -67,7 +67,7 @@ export default async function WrappedPage() {
       </Link>
 
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight">{t.progress.wrappedTitle}</h1>
+        <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{t.progress.wrappedTitle}</h1>
         <p className="text-sm text-[var(--color-text-secondary)]">{t.progress.wrappedSubtitle}</p>
       </div>
 

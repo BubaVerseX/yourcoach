@@ -1,8 +1,8 @@
 import { type HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-/** Elevated surface — flat #14181d field, hairline border, no radius,
- * no shadow. This system has no elevation, only contrast. */
+/** Elevated surface — flat var(--color-surface) field, hairline border,
+ * no radius, no shadow. This system has no elevation, only contrast. */
 export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div

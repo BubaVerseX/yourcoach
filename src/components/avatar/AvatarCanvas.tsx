@@ -21,7 +21,7 @@ function HumanoidModel({ params }: { params: AvatarParams }) {
  */
 export function AvatarCanvas({
   params,
-  accentHex = "#ff5722",
+  accentHex = "#e11d1d",
 }: {
   params: AvatarParams;
   accentHex?: string;

@@ -42,10 +42,10 @@ export default async function UpgradePage() {
       </Link>
 
       <div className="flex flex-col items-center gap-2 text-center">
-        <div className="soft-pressed flex h-16 w-16 items-center justify-center rounded-2xl">
-          <Sparkles strokeWidth={1.8} className="h-7 w-7 text-[var(--color-accent)]" />
+        <div className="card-info-icon h-16 w-16 rounded-2xl">
+          <Sparkles strokeWidth={1.8} className="h-7 w-7" />
         </div>
-        <h1 className="text-3xl font-extrabold tracking-tight">{t.premium.title}</h1>
+        <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{t.premium.title}</h1>
         <p className="max-w-sm text-sm text-[var(--color-text-secondary)]">{t.premium.subtitle}</p>
       </div>
 
@@ -56,8 +56,8 @@ export default async function UpgradePage() {
         <div className="flex flex-col gap-3">
           {benefits.map(({ icon: Icon, text }) => (
             <div key={text} className="flex items-start gap-3">
-              <div className="soft-pressed flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
-                <Icon strokeWidth={1.8} className="h-4 w-4 text-[var(--color-accent)]" />
+              <div className="card-info-icon h-9 w-9 shrink-0 rounded-xl">
+                <Icon strokeWidth={1.8} className="h-4 w-4" />
               </div>
               <span className="text-sm text-[var(--color-text-secondary)]">{text}</span>
             </div>
@@ -67,7 +67,10 @@ export default async function UpgradePage() {
 
       <Card className="relative flex flex-col items-center gap-4 overflow-hidden text-center">
         <OrnamentalLinework className="text-[var(--color-accent)] opacity-[0.05]" />
-        <span className="relative text-2xl font-extrabold tracking-tight">
+        <span className="text-mono-label relative text-[10px] text-[var(--color-text-tertiary)]">
+          {t.premium.title}
+        </span>
+        <span className="relative text-3xl font-extrabold tracking-tight text-[var(--color-accent)]">
           {format(t.premium.priceLabel, {
             amount: PREMIUM_ANNUAL_PRICE.amount,
             currency: PREMIUM_ANNUAL_PRICE.currency,

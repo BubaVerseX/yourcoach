@@ -11,8 +11,8 @@ interface DuotonePhotoProps {
   clipPath?: string;
 }
 
-/** Athletic photography treatment (Rule B) — duotone blue base with an
- * orange diagonal legibility overlay. Never use on food photography. */
+/** Athletic photography treatment (Rule B) — duotone red/teal base with a
+ * red diagonal legibility overlay. Never use on food photography. */
 export function DuotonePhoto({ src, alt, className, sizes = "100vw", preload, clipPath }: DuotonePhotoProps) {
   return (
     <div className={cn("relative overflow-hidden bg-[var(--color-duotone-a)]", className)} style={clipPath ? { clipPath } : undefined}>
@@ -36,7 +36,7 @@ export function DuotonePhoto({ src, alt, className, sizes = "100vw", preload, cl
       />
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "linear-gradient(200deg, rgba(255,87,34,0.22), rgba(10,12,15,0.9))" }}
+        style={{ background: "linear-gradient(200deg, rgba(225,29,29,0.22), rgba(10,10,10,0.9))" }}
       />
     </div>
   );

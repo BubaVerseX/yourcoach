@@ -34,7 +34,7 @@ export default async function LandingPage() {
         />
 
         <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 md:px-8">
-          <span className="text-display text-xl tracking-[0.04em] text-[var(--color-text-primary)]">
+          <span className="text-display gradient-text-signature text-xl tracking-[0.04em]">
             {t.common.appName.toUpperCase()}
           </span>
           <div className="flex items-center gap-3">
@@ -55,8 +55,8 @@ export default async function LandingPage() {
         </div>
 
         <div className="relative z-10 mx-auto -mt-6 w-full max-w-6xl px-5 pb-16 md:px-8">
-          <h1 className="text-display -ml-1 text-[56px] text-[var(--color-text-primary)] md:-ml-2 md:text-[92px]">
-            NO OFF <span className="text-[var(--color-accent)]">SEASON</span>
+          <h1 className="text-display gradient-text-signature -ml-1 text-[56px] md:-ml-2 md:text-[92px]">
+            NO OFF SEASON
           </h1>
           <span className="mt-5 block h-[3px] w-16 bg-[var(--color-accent)]" />
           <h2 className="mt-5 max-w-lg text-[22px] leading-tight font-black tracking-[-0.03em] md:text-[27px]">

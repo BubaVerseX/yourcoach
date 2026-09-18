@@ -24,7 +24,7 @@ export default async function ProfileEditPage() {
         <ArrowLeft strokeWidth={1.8} className="h-4 w-4" />
         {t.profile.title}
       </Link>
-      <h1 className="text-3xl font-extrabold tracking-tight">{t.profile.editProfile}</h1>
+      <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{t.profile.editProfile}</h1>
       <ProfileEditForm profile={profile} />
     </div>
   );

@@ -30,13 +30,13 @@ function drawWrappedCard(
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  ctx.fillStyle = "#06080a";
+  ctx.fillStyle = "#020202";
   ctx.fillRect(0, 0, width, height);
 
   ctx.save();
   ctx.translate(90, 90);
   ctx.rotate(-0.35);
-  ctx.fillStyle = "rgba(255,87,34,0.1)";
+  ctx.fillStyle = "rgba(225,29,29,0.1)";
   ctx.fillRect(-140, -140, 280, 280);
   ctx.restore();
 
@@ -56,7 +56,7 @@ function drawWrappedCard(
   ctx.font = "700 16px ui-monospace, monospace";
   ctx.fillText(data.dateRangeLabel, 64, 118);
 
-  ctx.fillStyle = "#ff5722";
+  ctx.fillStyle = "#e11d1d";
   ctx.font = "800 170px -apple-system, sans-serif";
   ctx.fillText(`${data.workoutsThisWeek}/7`, 60, 400);
   ctx.fillRect(64, 424, 78, 3);

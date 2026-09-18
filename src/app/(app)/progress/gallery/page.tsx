@@ -38,7 +38,7 @@ export default async function ProgressGalleryPage() {
         {t.progress.title}
       </Link>
 
-      <h1 className="text-3xl font-extrabold tracking-tight">{t.progress.galleryTitle}</h1>
+      <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{t.progress.galleryTitle}</h1>
 
       {photos.length === 0 ? (
         <EmptyState icon={Images} title={t.progress.galleryTitle} description={t.progress.galleryEmpty} />

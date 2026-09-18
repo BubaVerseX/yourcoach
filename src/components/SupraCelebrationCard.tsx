@@ -4,7 +4,7 @@ import { useLocale } from "@/lib/i18n";
 
 /** Supra mode — celebration framing for a social/feast meal, never a diet
  * infraction. Deliberately warm palette (#1a0f07 / amber), tonally
- * distinct from the standard #14181d logging surface. No calorie or
+ * distinct from the standard dark logging surface. No calorie or
  * macro figure appears anywhere on this card. */
 export function SupraCelebrationCard({
   logged,

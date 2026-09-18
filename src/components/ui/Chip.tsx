@@ -5,7 +5,7 @@ interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
 }
 
-/** Sharp rectangle chip — no radius. Selected state is an orange-filled
+/** Sharp rectangle chip — no radius. Selected state is a red-filled
  * segment (language switch, filter tabs); unselected is bordered. */
 export function Chip({ selected, className, children, ...props }: ChipProps) {
   return (

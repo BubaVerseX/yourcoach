@@ -252,7 +252,7 @@ export default async function MealDayPage({
         <span className="text-mono-label block text-[10px] text-[var(--color-text-tertiary)]">
           {`WEEK ${weekNumber} · DAY ${dayNumber}`}
         </span>
-        <h1 className="text-[26px] font-black tracking-[-0.03em] text-[var(--color-text-primary)]">
+        <h1 className="gradient-text-signature text-[26px] font-black tracking-[-0.03em]">
           {t.meals.title}
         </h1>
       </div>

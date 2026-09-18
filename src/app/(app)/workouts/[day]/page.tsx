@@ -73,7 +73,7 @@ export default async function WorkoutDayPage({
         {t.workouts.title}
       </Link>
 
-      <h1 className="text-3xl font-extrabold tracking-tight">{dayLabel(dayKey, t)}</h1>
+      <h1 className="gradient-text-signature text-3xl font-extrabold tracking-tight">{dayLabel(dayKey, t)}</h1>
 
       {dayPlan.type === "rest" ? (
         <Card className="flex flex-col items-center gap-3 py-10 text-center">

@@ -121,7 +121,7 @@ export default async function ProgressPage() {
   return (
     <div className="flex flex-col gap-6 py-6">
       <div className="flex items-baseline gap-3">
-        <h1 className="text-[26px] font-black tracking-[-0.03em] text-[var(--color-text-primary)]">
+        <h1 className="gradient-text-signature text-[26px] font-black tracking-[-0.03em]">
           {t.progress.title}
         </h1>
         <span className="text-display text-2xl text-[var(--color-accent)]">

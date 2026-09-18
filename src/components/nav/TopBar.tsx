@@ -23,7 +23,7 @@ export function TopBar({ fullName }: { fullName?: string | null }) {
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-5 md:px-8">
-      <Link href="/home" className="text-display text-xl tracking-[0.04em] text-[var(--color-text-primary)]">
+      <Link href="/home" className="text-display gradient-text-signature text-xl tracking-[0.04em]">
         {t.common.appName.toUpperCase()}
       </Link>
 

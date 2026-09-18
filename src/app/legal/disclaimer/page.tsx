@@ -18,7 +18,7 @@ export default function DisclaimerPage() {
         {t.common.back}
       </Link>
       <Card>
-        <h1 className="mb-4 text-2xl font-extrabold tracking-tight">{t.disclaimer.title}</h1>
+        <h1 className="gradient-text-signature mb-4 text-2xl font-extrabold tracking-tight">{t.disclaimer.title}</h1>
         <p className="text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
           {t.disclaimer.body}
         </p>
